@@ -1,16 +1,35 @@
-import Room from '../models/Room';
-
+import Room from '../models/Room.js';
+import { roomSchema } from '../validation/JoiShema.js';
+import House from "../models/House.js"
+import Floor from "../models/Floor.js"
 // Créer une pièce
 const createRoom = async (req, res) => {
-  try {
-    const room = new Room(req.body);
-    await room.save();
-    res.status(201).json(room);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
+	try {
+	  const { error } = roomSchema.validate(req.body);
+	  if (error) {
+		return res.status(400).json({ message: error.details[0].message });
+	  }
+  
+	  const room = new Room(req.body);
+	  await room.save();
+	  const floor = await Floor.findById(req.body.Floor);
+	  if (!floor) {
+		return res.status(404).json({ message: 'Floor not found' });
+	  }
+	  floor.Rooms.push(room._id);
+	  await floor.save();
+	  const house = await House.findById(req.body.House);
+	  if (!house) {
+		return res.status(404).json({ message: 'House not found' });
+	  }
+	  house.Rooms.push(room._id);
+	  await house.save();
+	  res.status(201).json(room);
+	} catch (error) {
+	  res.status(400).json({ message: error.message });
+	}
+  };
+  
 // Obtenir toutes les pièces
 const getAllRooms = async (req, res) => {
   try {
