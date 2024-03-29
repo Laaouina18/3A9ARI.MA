@@ -1,46 +1,34 @@
 // LoginForm.jsx
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Login } from "../redux/actions/Actions.js";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [user, setUser] = useState({ email: "", password: "" });
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('http://127.0.0.1:8000/api/Login', {
-        email,
-        password,
-      });
-      // Handle successful login
-      localStorage.setItem('token', res.data.data.token);
-      localStorage.setItem('role', res.data.data.user.role);
-      localStorage.setItem('name', res.data.data.user.name);
-      localStorage.setItem('avatar', res.data.data.user.avatar);
-      localStorage.setItem('id', res.data.data.user.id);
-
-      if (res.data.data.user.role === 'owner') {
-        // Redirect to owner dashboard
-        window.location.href = '/Dashboard';
-      } else if (res.data.data.user.role === 'client') {
-        // Redirect to client dashboard or home page
-        window.location.href = '/';
-      }
-    } catch (error) {
-      // Handle login error
-      if (error.response.data.errors) {
-        setEmailError(error.response.data.errors.email[0] || false);
-        setPasswordError(error.response.data.errors.password[0] || false);
-      } else {
-        setError(error.response.data.message);
-        setEmailError(false);
-        setPasswordError(false);
-      }
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      navigate("/dashboard");
     }
+  }, [navigate]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!user.email) {
+      setEmailError("Email is required");
+      return;
+    }
+    setEmailError("");
+    dispatch(Login(user))
+      .then(() => navigate("/dashboard"))
+      .catch((error) => setError(error.message));
   };
 
   return (
@@ -58,8 +46,8 @@ const LoginForm = () => {
             <input
               type="email"
               id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
               className={`appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                 emailError ? 'border-red-500' : ''
               }`}
@@ -74,8 +62,8 @@ const LoginForm = () => {
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
               className={`appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                 passwordError ? 'border-red-500' : ''
               }`}
@@ -99,7 +87,7 @@ const LoginForm = () => {
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             Don't have an account?{' '}
-            <a href="#" className="text-blue-500 hover:text-blue-800">
+            <a href="/register" className="text-blue-500 hover:text-blue-800">
               Sign up
             </a>
           </p>

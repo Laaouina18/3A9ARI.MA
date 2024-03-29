@@ -7,12 +7,14 @@ import DashboardLayout from '../components/DashboardLayout';
 import { Link } from 'react-router-dom';
 
 const OwnerDashboard = () => {
+	const user=JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getHouses());
         dispatch(clear());
-        localStorage.clear();
+        localStorage.removeItem("CurrentHouseId");
+		localStorage.removeItem("CurrentFloorId");
     }, []);
     const houses = useSelector((state) => state.Houses);
 
@@ -39,7 +41,7 @@ const OwnerDashboard = () => {
     return (
         <div className="w-full h-screen">
             <div className="flex h-full">
-                <DashboardLayout />
+                <DashboardLayout user={user} />
                 <div className='w-full p-6 overflow-y-auto'>
                     <div className="flex justify-end mb-4">
                         <button

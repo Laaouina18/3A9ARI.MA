@@ -1,8 +1,15 @@
 // DashboardLayout.jsx
-import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import userImage from "../assets/userImage.jpg";
 
 const DashboardLayout = () => {
+	const user = JSON.parse(localStorage.getItem('user'));
+	useEffect(() => {
+		console.log("user",user)
+	}, [])	;
+    const navigate = useNavigate();
+
     const toggleSidebar = () => {
         const sideElements = document.querySelectorAll('.side');
         const sideBarElements = document.querySelectorAll('.sideBar');
@@ -25,12 +32,11 @@ const DashboardLayout = () => {
             }
         }
     };
-    const user = {
-        id: 1,
-        name: "John Doe",
-        email: "john@example.com",
-        avatar: "https://via.placeholder.com/150",
-        role: "admin"
+
+    const handleLogout = () => {
+		alert("Vous voulez déconnecté");
+        localStorage.removeItem('user');
+        navigate('/login');
     };
 
     return (
@@ -38,20 +44,11 @@ const DashboardLayout = () => {
             <div className="sideBar transition-all duration-300 max-sm:ml-[-58px] ease-linear w-[60px] flex flex-col h-full p-2 top-0 bg-[#E2E6F3] px-2 border-r border-gray-700 relative">
                 <div className="flex flex-col items-center mt-6 -mx-2">
                     <h4 className="side hidden mx-2 my-6 font-medium text-lg text-[#364BDC]">Dashboard</h4>
-                    <img src={user.avatar} className="image object-cover w-24 h-24 mx-2 rounded-full h-8 w-8 transition-all duration-300" alt="Avatar" />
-                    <h4 className="side hidden mx-2 mt-2 font-medium text-[#DA6217]">{user.name}</h4>
+                    <img src={userImage} className="image object-cover w-24 h-24 mx-2 rounded-full h-8 w-8 transition-all duration-300" alt="Avatar" />
+                    <h4 className="side hidden mx-2 mt-2 font-medium text-[#DA6217]">{user?.firstName}</h4>
                 </div>
                 <div className="flex flex-col justify-between flex-1 mt-6">
                     <div>
-                        <NavLink to="/Dashboard" className="flex cursor-pointer items-center px-2 py-2 mt-5 transition-colors duration-300 transform rounded-lg text-[#616571] hover:bg-gray-100 hover:bg-gray-800 hover:text-gray-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-building-warehouse" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M3 21v-13l9 -4l9 4v13" />
-                                <path d="M13 13h4v8h-10v-6h6" />
-                                <path d="M13 21v-9a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v3" />
-                            </svg>
-                            <span className="side hidden mx-4 font-medium">Your Houses</span>
-                        </NavLink>
                         <NavLink to="/Buy" className="flex cursor-pointer items-center px-2 py-2 mt-5 transition-colors duration-300 transform rounded-lg text-[#616571] hover:bg-gray-100 hover:bg-gray-800 hover:text-gray-200">
                             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-home-2" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -86,6 +83,14 @@ const DashboardLayout = () => {
                                 <path d="M8 13h6" />
                             </svg>
                             <span className="side hidden mx-4 font-medium">Messages</span>
+                        </NavLink>
+                        <NavLink to="/home" className="flex cursor-pointer items-center px-2 py-2 mt-5 transition-colors duration-300 transform rounded-lg text-[#616571] hover:bg-gray-100 hover:bg-gray-800 hover:text-gray-200" onClick={handleLogout}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-logout" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
+                                <path d="M7 12h14l-3 -3m0 6l3 -3" />
+                            </svg>
+                            <span className="side hidden mx-4 font-medium">Logout</span>
                         </NavLink>
                     </div>
                 </div>

@@ -6,8 +6,9 @@ import { actionTypes } from "../types/action-Types";
 const Signin = (user) => {
 	return async (dispatch) => {
 		try {
-			const response = await axios.post("/auth/inscrir", user);
-
+			console.log(user)
+			const response = await axios.post("/auth/register", user);
+console.log(response.data)
 			dispatch({ type: actionTypes.SIGNIN_SUCCESS, payload: response.data });
 		} catch (error) {
 			dispatch({ type: actionTypes.SIGNIN_FAILURE, payload: error.response.data.message });
@@ -20,8 +21,9 @@ const Login = (user) => {
 	return async (dispatch) => {
 		try {
 			const response = await axios.post("/auth/login", user);
-
+			console.log(response.data)
 			dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: response.data });
+			localStorage.setItem("user", JSON.stringify(response.data));
 		} catch (error) {
 
 			dispatch({ type: actionTypes.LOGIN_FAILURE, payload: error.response.data.message });
@@ -77,10 +79,10 @@ const getHouses=()=>{
 
 }
 }
-const updateRoom=(room)=>{
+const updateRoom=(room,id)=>{
 	return async (dispatch)=>{
 
-		const response =await axios.put("/Rooms",room);
+		const response =await axios.put(`/Rooms/${id}`,room);
 		dispatch({type:actionTypes.UPDATE_ROOM,payload:response.data})
 
 }
@@ -93,10 +95,10 @@ const deleteRoom=(id)=>{
 
 }
 }
-const updateFloor=(floor)=>{
+const updateFloor=(floor,id)=>{
 	return async (dispatch)=>{
 
-		const response =await axios.put("/Floors",floor);
+		const response =await axios.put(`/Floors/${id}`,floor);
 		dispatch({type:actionTypes.UPDATE_FLOOR,payload:response.data})
 
 }
