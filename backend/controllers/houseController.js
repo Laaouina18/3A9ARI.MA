@@ -5,28 +5,15 @@ import User from '../models/User.js';
 // Créer une maison avec les détails des étages et des pièces
 const createHouse = async (req, res) => {
   try {
-    // Valider les données du corps de la requête avec le schéma Joi
     const { error } = houseSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
-
-    // Créer la maison en utilisant les données du corps de la requête
     const house = await House.create(req.body);
-
-    // Récupérer l'ID de l'utilisateur à partir des données de la requête (si disponible)
     const userId = req.body.Owner;
-
-    // Si vous avez l'ID de l'utilisateur, ajoutez l'ID de la maison à sa liste de maisons
     if (userId) {
       await User.findByIdAndUpdate(userId, { $push: { House: house._id } });
-    }
-
-    // Peupler les détails des étages et des pièces pour la maison créée
-    await house.populate('Floors').populate({
-      path: 'Floors',
-      populate: { path: 'Rooms' }
-    }).execPopulate();
+    };
 
     res.status(201).json(house);
   } catch (error) {
