@@ -33,7 +33,6 @@ const update = location.state && location.state.update;
     const onSubmitRoom = (e) => {
         e.preventDefault();
 		if (update && roomData._id) {
-			
 			dispatch(updateRoom(room, roomData._id));
 			setPosition(position + 1);
 			setRoom({
@@ -46,7 +45,7 @@ const update = location.state && location.state.update;
 				description: ""
 			});
 		navigate('/dashboard');
-		}
+		}else{
 		if (!room.roomArea || !room.roomType || !room.description) {
             alert("Veuillez remplir tous les champs obligatoires.");
             return;
@@ -65,10 +64,9 @@ const update = location.state && location.state.update;
             description: ""
         });
         if (position >= roomNbrs) {
-			console.log("floorNumber",floorNumber)
             dispatch(setCurrentFloor(parseInt(floorNumber + 1)));
             navigate('/add-floor');
-        }
+        }}
     };
 	useEffect(() => {
 		if (update && roomData) {

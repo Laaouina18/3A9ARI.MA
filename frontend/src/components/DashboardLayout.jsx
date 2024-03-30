@@ -5,9 +5,6 @@ import userImage from "../assets/userImage.jpg";
 
 const DashboardLayout = () => {
 	const user = JSON.parse(localStorage.getItem('user'));
-	useEffect(() => {
-		console.log("user",user)
-	}, [])	;
     const navigate = useNavigate();
 
     const toggleSidebar = () => {

@@ -24,16 +24,11 @@ const AddHouse = () => {
     Owner: userId,
     Transaction_Type: '',
   });
-  const [floors, setFloors] = useState([]); // Étages
-
-  useEffect(() => {
-    console.log('CurrentHouse:', Current);
-  }, [Current]);
+  const [floors, setFloors] = useState([]);
 
   useEffect(() => {
     if (update) {
       dispatch(getHouse(location.state.house._id));
-      console.log('hdkjjk', Current);
       const houseData = location.state && location.state.house;
       if (houseData) {
         setHouse(houseData);
@@ -54,7 +49,6 @@ const AddHouse = () => {
       return;
     }
     if (update) {
-      console.log(house.Floors);
       dispatch(updateHouse(house, house._id));
       setHouse({
         Type: '',

@@ -158,12 +158,12 @@ const AddFloor = () => {
           </div>
         </div>
       ) : (
-        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl p-8 animate-fadeIn">
-          <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">Update Rooms</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {floorData.Rooms && floorData.Rooms.length > 0 ? (
-              floorData.Rooms.map((room, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+		<div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl p-8 animate-fadeIn">
+  <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">Update Rooms</h1>
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mx-auto">
+    {floorData.Rooms && floorData.Rooms.length > 0 ? (
+      floorData.Rooms.map((room, index) => (
+        <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
                   <img
                     className="w-full h-48 object-cover"
                     src={room.room_pic}
